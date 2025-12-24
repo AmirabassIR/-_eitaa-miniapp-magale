@@ -5,905 +5,221 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>📚 مقالات نظامی تخصصی</title>
 <style>
-    @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Vazir', sans-serif;
-        direction: rtl;
-        background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.9)), 
-                    url('https://www.jowhareh.com/images/Jowhareh/galleries_5/medium_d44e68c0-2cf2-4172-89b2-ddbc49789dbe.webp') center/cover no-repeat fixed;
-        color: #fff;
-        min-height: 100vh;
-        padding: 20px;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    /* هدر */
-    .header {
-        text-align: center;
-        padding: 40px 20px;
-        margin-bottom: 50px;
-        background: rgba(0, 0, 0, 0.7);
-        border-radius: 20px;
-        border: 3px solid #ffd700;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        position: relative;
-        overflow: hidden;
-        backdrop-filter: blur(5px);
-    }
-
-    .header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-        background: linear-gradient(90deg, #ffd700, #ff6b6b, #4ecdc4);
-    }
-
-    .header h1 {
-        font-size: 42px;
-        color: #ffd700;
-        margin-bottom: 20px;
-        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-    }
-
-    .header p {
-        font-size: 20px;
-        color: #aaa;
-        max-width: 800px;
-        margin: 0 auto;
-        line-height: 1.8;
-    }
-
-    /* دسته‌بندی‌ها */
-    .categories-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 30px;
-        margin-bottom: 60px;
-    }
-
-    .category-card {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 30px;
-        text-align: center;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: 2px solid transparent;
-        position: relative;
-        overflow: hidden;
-        cursor: pointer;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .category-card:hover {
-        transform: translateY(-10px) scale(1.03);
-        border-color: #ffd700;
-        box-shadow: 0 15px 35px rgba(255, 215, 0, 0.3);
-        background: rgba(255, 255, 255, 0.15);
-    }
-
-    .category-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-        background: linear-gradient(90deg, #ff6b6b, #ffd700, #4ecdc4);
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
-
-    .category-card:hover::before {
-        opacity: 1;
-    }
-
-    .category-image {
-        width: 140px;
-        height: 140px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 4px solid #ffd700;
-        margin-bottom: 25px;
-        transition: all 0.3s;
-        background: white;
-        padding: 5px;
-    }
-
-    .category-card:hover .category-image {
-        transform: rotate(5deg) scale(1.1);
-        border-color: #ff6b6b;
-    }
-
-    .category-title {
-        font-size: 26px;
-        color: #ffd700;
-        margin-bottom: 15px;
-        font-weight: bold;
-        min-height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .category-desc {
-        color: #ccc;
-        font-size: 16px;
-        line-height: 1.6;
-        margin-bottom: 25px;
-        flex-grow: 1;
-    }
-
-    .category-btn {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-        color: white;
-        border: none;
-        padding: 14px 35px;
-        border-radius: 50px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s;
-        width: 100%;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .category-btn:hover {
-        background: linear-gradient(135deg, #ff8e53 0%, #ff6b6b 100%);
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
-    }
-
-    .article-count {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        background: #ff6b6b;
-        color: white;
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 18px;
-        border: 3px solid white;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    /* لیست مقالات */
-    .articles-section {
-        display: none;
-        animation: fadeIn 0.5s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 40px;
-        padding-bottom: 20px;
-        border-bottom: 3px solid #ffd700;
-    }
-
-    .section-header h2 {
-        font-size: 32px;
-        color: #ffd700;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    }
-
-    .back-btn {
-        background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
-        color: white;
-        border: none;
-        padding: 12px 30px;
-        border-radius: 8px;
-        font-size: 18px;
-        cursor: pointer;
-        transition: all 0.3s;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .back-btn:hover {
-        transform: translateX(-5px);
-        box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
-    }
-
-    .articles-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 30px;
-    }
-
-    .article-card {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 15px;
-        padding: 30px;
-        transition: all 0.3s;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        cursor: pointer;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .article-card:hover {
-        background: rgba(255, 255, 255, 0.12);
-        transform: translateY(-5px);
-        border-color: #ffd700;
-        box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
-    }
-
-    .article-number {
-        font-size: 24px;
-        color: #ffd700;
-        margin-bottom: 15px;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .article-card h3 {
-        color: #4ecdc4;
-        font-size: 22px;
-        margin-bottom: 15px;
-        line-height: 1.4;
-        flex-grow: 1;
-    }
-
-    .article-excerpt {
-        color: #ccc;
-        line-height: 1.8;
-        font-size: 16px;
-        margin-bottom: 20px;
-        flex-grow: 2;
-    }
-
-    .read-more {
-        background: transparent;
-        color: #ffd700;
-        border: 2px solid #ffd700;
-        padding: 10px 25px;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.3s;
-        text-align: center;
-        margin-top: auto;
-    }
-
-    .read-more:hover {
-        background: #ffd700;
-        color: #0c2461;
-        transform: scale(1.05);
-    }
-
-    /* صفحه مقاله کامل */
-    .article-full {
-        display: none;
-        animation: fadeIn 0.5s ease;
-    }
-
-    .article-header-full {
-        background: rgba(0, 0, 0, 0.6);
-        padding: 50px;
-        border-radius: 20px;
-        margin-bottom: 40px;
-        border: 2px solid #ffd700;
-        position: relative;
-    }
-
-    .article-header-full h1 {
-        font-size: 36px;
-        color: #ffd700;
-        margin-bottom: 25px;
-        line-height: 1.4;
-    }
-
-    .article-meta-full {
-        display: flex;
-        gap: 30px;
-        color: #aaa;
-        font-size: 18px;
-        margin-bottom: 25px;
-        flex-wrap: wrap;
-    }
-
-    .article-category-badge {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-        color: white;
-        padding: 8px 20px;
-        border-radius: 20px;
-        font-size: 16px;
-        display: inline-block;
-    }
-
-    .article-content {
-        background: rgba(255, 255, 255, 0.05);
-        padding: 50px;
-        border-radius: 20px;
-        line-height: 2;
-        font-size: 20px;
-        margin-bottom: 40px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .article-content h2 {
-        color: #4ecdc4;
-        margin: 35px 0 20px;
-        border-right: 4px solid #ffd700;
-        padding-right: 15px;
-        font-size: 28px;
-    }
-
-    .article-content h3 {
-        color: #ffd700;
-        margin: 30px 0 15px;
-        font-size: 24px;
-    }
-
-    .article-content p {
-        margin-bottom: 25px;
-        text-align: justify;
-    }
-
-    .article-content ul {
-        margin: 25px 0;
-        padding-right: 35px;
-    }
-
-    .article-content li {
-        margin-bottom: 12px;
-        position: relative;
-    }
-
-    .article-content li::before {
-        content: '•';
-        color: #ffd700;
-        font-size: 24px;
-        position: absolute;
-        right: -25px;
-    }
-
-    .article-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 25px;
-        border-top: 2px solid rgba(255, 255, 255, 0.1);
-        color: #aaa;
-        font-size: 16px;
-    }
-
-    /* فوتر */
-    .footer {
-        text-align: center;
-        padding: 40px 20px;
-        margin-top: 60px;
-        color: #aaa;
-        font-size: 16px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 15px;
-    }
-
-    /* ریسپانسیو */
-    @media (max-width: 768px) {
-        .categories-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .articles-list { grid-template-columns: 1fr; }
-        .header h1 { font-size: 32px; }
-        .category-title { font-size: 22px; }
-        .article-header-full h1 { font-size: 28px; }
-        .article-content { padding: 30px; font-size: 18px; }
-        .category-image { width: 120px; height: 120px; }
-    }
-
-    @media (max-width: 480px) {
-        .container { padding: 10px; }
-        .header { padding: 30px 15px; }
-        .header h1 { font-size: 28px; }
-        .category-card { padding: 25px; }
-        .category-image { width: 100px; height: 100px; }
-        .section-header { flex-direction: column; gap: 20px; text-align: center; }
-        .article-meta-full { flex-direction: column; gap: 15px; }
-        .article-content { padding: 20px; font-size: 17px; }
-    }
-
-    /* انیمیشن‌ها */
-    @keyframes slideIn {
-        from { opacity: 0; transform: translateX(-30px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-
-    .slide-in { animation: slideIn 0.6s ease forwards; }
-    .delay-1 { animation-delay: 0.1s; opacity: 0; }
-    .delay-2 { animation-delay: 0.2s; opacity: 0; }
-    .delay-3 { animation-delay: 0.3s; opacity: 0; }
-    .delay-4 { animation-delay: 0.4s; opacity: 0; }
-    .delay-5 { animation-delay: 0.5s; opacity: 0; }
-    .delay-6 { animation-delay: 0.6s; opacity: 0; }
+/* ==== سبک‌ها (CSS) ==== */
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Vazir',sans-serif;direction:rtl;background:linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.9)),url('https://www.jowhareh.com/images/Jowhareh/galleries_5/medium_d44e68c0-2cf2-4172-89b2-ddbc49789dbe.webp') center/cover no-repeat fixed;color:#fff;min-height:100vh;padding:20px;}
+.container{max-width:1200px;margin:0 auto;}
+.header{text-align:center;padding:40px 20px;margin-bottom:50px;background:rgba(0,0,0,0.7);border-radius:20px;border:3px solid #ffd700;box-shadow:0 10px 30px rgba(0,0,0,0.5);position:relative;overflow:hidden;backdrop-filter:blur(5px);}
+.header::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#ffd700,#ff6b6b,#4ecdc4);}
+.header h1{font-size:42px;color:#ffd700;margin-bottom:20px;text-shadow:3px 3px 6px rgba(0,0,0,0.8);}
+.header p{font-size:20px;color:#aaa;max-width:800px;margin:0 auto;line-height:1.8;}
+.categories-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin-bottom:60px;}
+.category-card{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:20px;padding:30px;text-align:center;transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);border:2px solid transparent;position:relative;overflow:hidden;cursor:pointer;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;}
+.category-card:hover{transform:translateY(-10px) scale(1.03);border-color:#ffd700;box-shadow:0 15px 35px rgba(255,215,0,0.3);background:rgba(255,255,255,0.15);}
+.category-image{width:140px;height:140px;border-radius:50%;object-fit:cover;border:4px solid #ffd700;margin-bottom:25px;transition:all 0.3s;background:white;padding:5px;}
+.category-title{font-size:26px;color:#ffd700;margin-bottom:15px;font-weight:bold;min-height:60px;display:flex;align-items:center;justify-content:center;}
+.category-desc{color:#ccc;font-size:16px;line-height:1.6;margin-bottom:25px;flex-grow:1;}
+.category-btn{background:linear-gradient(135deg,#ff6b6b 0%,#ff8e53 100%);color:white;border:none;padding:14px 35px;border-radius:50px;font-size:18px;font-weight:bold;cursor:pointer;transition:all 0.3s;width:100%;border:2px solid rgba(255,255,255,0.2);}
+.category-btn:hover{background:linear-gradient(135deg,#ff8e53 0%,#ff6b6b 100%);transform:translateY(-3px);box-shadow:0 8px 20px rgba(255,107,107,0.4);}
+.article-count{position:absolute;top:20px;left:20px;background:#ff6b6b;color:white;width:45px;height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;border:3px solid white;box-shadow:0 4px 10px rgba(0,0,0,0.3);}
+.articles-section{display:none;animation:fadeIn 0.5s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;padding-bottom:20px;border-bottom:3px solid #ffd700;}
+.section-header h2{font-size:32px;color:#ffd700;text-shadow:2px 2px 4px rgba(0,0,0,0.8);}
+.back-btn{background:linear-gradient(135deg,#4ecdc4 0%,#44a08d 100%);color:white;border:none;padding:12px 30px;border-radius:8px;font-size:18px;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:10px;border:2px solid rgba(255,255,255,0.2);}
+.back-btn:hover{transform:translateX(-5px);box-shadow:0 5px 15px rgba(78,205,196,0.4);}
+.articles-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:30px;}
+.article-card{background:rgba(255,255,255,0.08);border-radius:15px;padding:30px;transition:all 0.3s;border:1px solid rgba(255,255,255,0.1);cursor:pointer;height:100%;display:flex;flex-direction:column;}
+.article-card:hover{background:rgba(255,255,255,0.12);transform:translateY(-5px);border-color:#ffd700;box-shadow:0 10px 25px rgba(255,215,0,0.2);}
+.article-number{font-size:24px;color:#ffd700;margin-bottom:15px;font-weight:bold;display:flex;align-items:center;gap:10px;}
+.article-card h3{color:#4ecdc4;font-size:22px;margin-bottom:15px;line-height:1.4;flex-grow:1;}
+.article-excerpt{color:#ccc;line-height:1.8;font-size:16px;margin-bottom:20px;flex-grow:2;}
+.read-more{background:transparent;color:#ffd700;border:2px solid #ffd700;padding:10px 25px;border-radius:8px;font-size:16px;cursor:pointer;transition:all 0.3s;text-align:center;margin-top:auto;}
+.read-more:hover{background:#ffd700;color:#0c2461;transform:scale(1.05);}
+.article-full{display:none;animation:fadeIn 0.5s ease;}
+.article-header-full{background:rgba(0,0,0,0.6);padding:50px;border-radius:20px;margin-bottom:40px;border:2px solid #ffd700;position:relative;}
+.article-header-full h1{font-size:36px;color:#ffd700;margin-bottom:25px;line-height:1.4;}
+.article-meta-full{display:flex;gap:30px;color:#aaa;font-size:18px;margin-bottom:25px;flex-wrap:wrap;}
+.article-category-badge{background:linear-gradient(135deg,#ff6b6b 0%,#ff8e53 100%);color:white;padding:8px 20px;border-radius:20px;font-size:16px;display:inline-block;}
+.article-content{background:rgba(255,255,255,0.05);padding:50px;border-radius:20px;line-height:2;font-size:20px;margin-bottom:40px;border:1px solid rgba(255,255,255,0.1);}
+.article-content h2{color:#4ecdc4;margin:35px 0 20px;border-right:4px solid #ffd700;padding-right:15px;font-size:28px;}
+.article-content h3{color:#ffd700;margin:30px 0 15px;font-size:24px;}
+.article-content p{margin-bottom:25px;text-align:justify;}
+.article-content ul{margin:25px 0;padding-right:35px;}
+.article-content li{margin-bottom:12px;position:relative;}
+.article-content li::before{content:'•';color:#ffd700;font-size:24px;position:absolute;right:-25px;}
+.article-footer{display:flex;justify-content:space-between;align-items:center;padding-top:25px;border-top:2px solid rgba(255,255,255,0.1);color:#aaa;font-size:16px;}
+.footer{text-align:center;padding:40px 20px;margin-top:60px;color:#aaa;font-size:16px;border-top:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);border-radius:15px;}
+.admin-form{background:rgba(0,0,0,0.7);padding:30px;margin-bottom:30px;border-radius:15px;border:2px solid #ffd700;}
+.admin-form input, .admin-form textarea, .admin-form select{width:100%;margin-bottom:15px;padding:12px;border-radius:8px;border:none;font-size:16px;}
+.admin-form button{background:#ffd700;color:#0c2461;padding:12px 25px;border:none;border-radius:8px;font-size:16px;cursor:pointer;}
+.admin-form button:hover{background:#ff6b6b;color:white;}
 </style>
 </head>
 <body>
-
 <div class="container">
     <!-- هدر -->
     <header class="header">
         <h1>📚 مقالات نظامی تخصصی</h1>
         <p>مرجع تخصصی مقالات نظامی، تحلیل‌های راهبردی و اطلاعات نظامی روز جهان</p>
+        <button onclick="toggleAdminLogin()" style="margin-top:15px;background:#ff6b6b;color:white;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;">ورود ادمین</button>
     </header>
 
-    <!-- بخش دسته‌بندی‌ها -->
-    <div id="categoriesSection" class="categories-grid">
-        <!-- نیروی زمینی -->
-        <div class="category-card slide-in delay-1" onclick="showArticles('groundforce')">
-            <div class="article-count">۵</div>
-            <img src="https://www.jowhareh.com/images/Jowhareh/galleries_9/large_c180e836-f806-4f56-88f0-8aa6a6c3a068.webp"
-                 alt="نیروی زمینی" class="category-image">
-            <div class="category-title">نیروی زمینی</div>
-            <div class="category-desc">
-                تحلیل استراتژی‌های زمینی، تجهیزات پیاده‌نظام، تاکتیک‌های رزمی و عملیات‌های ویژه
-            </div>
-            <button class="category-btn" type="button">مشاهده ۵ مقاله →</button>
-        </div>
-
-        <!-- نیروی هوایی -->
-        <div class="category-card slide-in delay-2" onclick="showArticles('airforce')">
-            <div class="article-count">۵</div>
-            <img src="https://cdn.tabnak.ir/files/fa/news/1403/9/10/1919811_323.jpg"
-                 alt="نیروی هوایی" class="category-image">
-            <div class="category-title">نیروی هوایی</div>
-            <div class="category-desc">
-                هواپیماهای رزمی، سیستم‌های دفاع هوایی، استراتژی‌های هوایی و فناوری‌های مدرن
-            </div>
-            <button class="category-btn" type="button">مشاهده ۵ مقاله →</button>
-        </div>
-
-        <!-- نیروی دریایی -->
-        <div class="category-card slide-in delay-3" onclick="showArticles('navy')">
-            <div class="article-count">۵</div>
-            <img src="https://tiktarh.com/storage/old/2024/11/Shmltry1002363www.tiktarh.com_.jpg"
-                 alt="نیروی دریایی" class="category-image">
-            <div class="category-title">نیروی دریایی</div>
-            <div class="category-desc">
-                ناوگان‌های دریایی، زیردریایی‌ها، عملیات‌های آبی-خاکی و استراتژی‌های دریایی
-            </div>
-            <button class="category-btn" type="button">مشاهده ۵ مقاله →</button>
-        </div>
-
-        <!-- جنگ روسیه و اوکراین -->
-        <div class="category-card slide-in delay-4" onclick="showArticles('ukraine')">
-            <div class="article-count">۵</div>
-            <img src="https://cdn.donya-e-eqtesad.com/thumbnail/YNQnHPkr4bJf/QHn8O9nsSzT8qCU7RegsN6Pbb5v74eEtbKeSOh05Rab2U55spcPmLUt7TZyzEhnm/%D8%AC%D9%86%DA%AF+%D8%B1%D9%88%D8%B3%DB%8C%D9%87+%D9%88+%D8%A7%D9%88%DA%A9%D8%B1%D8%A7%DB%8C%D9%86+.jpg"
-                 alt="جنگ روسیه و اوکراین" class="category-image">
-            <div class="category-title">جنگ روسیه و اوکراین</div>
-            <div class="category-desc">
-                تحلیل روزانه نبردها، استراتژی‌های نظامی، تأثیرات منطقه‌ای و درس‌های نظامی
-            </div>
-            <button class="category-btn" type="button">مشاهده ۵ مقاله →</button>
-        </div>
-
-        <!-- جبهه مقاومت -->
-        <div class="category-card slide-in delay-5" onclick="showArticles('resistance')">
-            <div class="article-count">۵</div>
-            <img src="https://idc0-cdn0.khamenei.ir/ndata/news/47814/C/14000217_0147814.jpg?r=0.04465376324634085"
-                 alt="جبهه مقاومت" class="category-image">
-            <div class="category-title">جبهه مقاومت</div>
-            <div class="category-desc">
-                استراتژی‌های مقاومت، عملیات‌های مشترک، تحلیل توانمندی‌ها و چشم‌انداز آینده
-            </div>
-            <button class="category-btn" type="button">مشاهده ۵ مقاله →</button>
-        </div>
-
-        <!-- مقالات آزاد -->
-        <div class="category-card slide-in delay-6" onclick="showArticles('free')">
-            <div class="article-count">۵</div>
-            <div style="font-size: 70px; margin-bottom: 20px; color: #ffd700;">✏️</div>
-            <div class="category-title">مقالات آزاد نظامی</div>
-            <div class="category-desc">
-                موضوعات متنوع نظامی، تاریخ نظامی، فناوری‌های نوین و تحلیل‌های تخصصی
-            </div>
-            <button class="category-btn" type="button">مشاهده ۵ مقاله →</button>
+    <!-- فرم ورود ادمین -->
+    <div id="adminLogin" style="display:none;margin-bottom:30px;">
+        <div class="admin-form">
+            <input type="password" id="adminPassword" placeholder="رمز عبور ادمین">
+            <button onclick="loginAdmin()">ورود</button>
         </div>
     </div>
+
+    <!-- فرم اضافه و ویرایش مقاله -->
+    <div id="adminPanel" style="display:none;">
+        <div class="admin-form">
+            <h3>اضافه/ویرایش مقاله</h3>
+            <select id="editCategory">
+                <option value="groundforce">نیروی زمینی</option>
+                <option value="airforce">نیروی هوایی</option>
+                <option value="navy">نیروی دریایی</option>
+                <option value="ukraine">جنگ روسیه و اوکراین</option>
+                <option value="resistance">جبهه مقاومت</option>
+                <option value="free">مقالات آزاد نظامی</option>
+            </select>
+            <input type="number" id="editId" placeholder="شماره مقاله (برای ویرایش)">
+            <input type="text" id="editTitle" placeholder="عنوان مقاله">
+            <textarea id="editExcerpt" placeholder="خلاصه مقاله"></textarea>
+            <textarea id="editContent" placeholder="متن کامل مقاله (HTML)"></textarea>
+            <button onclick="saveArticle()">ذخیره مقاله</button>
+        </div>
+    </div>
+
+    <!-- بخش دسته‌بندی‌ها -->
+    <div id="categoriesSection" class="categories-grid"></div>
 
     <!-- بخش مقالات هر دسته -->
     <div id="articlesSection" class="articles-section">
         <div class="section-header">
             <h2 id="articlesTitle">مقالات</h2>
-            <button class="back-btn" onclick="backToCategories()" type="button">
-                ← بازگشت به دسته‌بندی‌ها
-            </button>
+            <button class="back-btn" onclick="backToCategories()" type="button">← بازگشت به دسته‌بندی‌ها</button>
         </div>
         <div class="articles-list" id="articlesList"></div>
     </div>
 
     <!-- صفحه مقاله کامل -->
     <div id="articleFull" class="article-full">
-        <button class="back-btn" onclick="backToArticles()" style="margin-bottom: 30px;" type="button">
-            ← بازگشت به مقالات
-        </button>
+        <button class="back-btn" onclick="backToArticles()" style="margin-bottom: 30px;" type="button">← بازگشت به مقالات</button>
         <div id="articleContent"></div>
     </div>
 </div>
 
-<!-- فوتر -->
 <footer class="footer">
     <p>© ۱۴۰۳ - سیستم مقالات نظامی تخصصی | تمامی حقوق محفوظ است</p>
     <p>این سایت صرفاً برای اهداف آموزشی و اطلاع‌رسانی طراحی شده است</p>
 </footer>
 
 <script>
-// ==================== داده‌های مقالات ====================
-const articlesData = {
-    "groundforce": [
-        {
-            id: 1,
-            title: "مقاله 1: استراتژی‌های نوین جنگ زمینی در قرن ۲۱",
-            content: `
-                <div class="article-header-full">
-                    <h1>مقاله 1: استراتژی‌های نوین جنگ زمینی در قرن ۲۱</h1>
-                    <div class="article-meta-full">
-                        <span>✍️ نویسنده: سرهنگ دکتر رضا محمدی</span>
-                        <span>📅 تاریخ: ۱۴۰۳/۱۱/۲۵</span>
-                        <span>👁️ بازدید: ۳۲۴</span>
-                        <span class="article-category-badge">نیروی زمینی</span>
-                    </div>
-                </div>
+// ======= داده‌ها =======
+const articlesData = { groundforce: [], airforce: [], navy: [], ukraine: [], resistance: [], free: [] };
 
-                <div class="article-content">
-                    <h2>مقدمه</h2>
-                    <p>جنگ زمینی در قرن ۲۱ دستخوش تحولات بنیادینی شده است. پیشرفت فناوری، تغییر در ماهیت تهدیدات و تحول در ساختار نیروها، همه و همه بر استراتژی‌های جنگی تأثیر گذاشته‌اند.</p>
+// ======= توابع نمایش =======
+function toggleAdminLogin(){
+    const loginDiv = document.getElementById('adminLogin');
+    loginDiv.style.display = loginDiv.style.display === 'none' ? 'block' : 'none';
+}
 
-                    <h2>تحولات کلیدی</h2>
-                    <p>نیروهای زمینی امروز باید بتوانند در محیط‌های پیچیده شهری، کوهستانی و بیابانی عملیات کنند. ادغام فناوری‌های نوین مانند پهپادها، سیستم‌های ارتباطی پیشرفته و تجهیزات شب‌نما اهمیت ویژه‌ای یافته است.</p>
+function loginAdmin(){
+    const pwd = document.getElementById('adminPassword').value;
+    if(pwd==='12345'){ // رمز ساده برای تست
+        alert('ورود موفق!');
+        document.getElementById('adminPanel').style.display='block';
+        document.getElementById('adminLogin').style.display='none';
+    }else{
+        alert('رمز اشتباه است!');
+    }
+}
 
-                    <h2>نتیجه‌گیری</h2>
-                    <p>نیروی زمینی موفق در قرن ۲۱ نیرویی است که بتواند به سرعت خود را با شرایط متغیر تطبیق دهد و از فناوری‌های نوین بهره ببرد.</p>
-                </div>
+function saveArticle(){
+    const cat = document.getElementById('editCategory').value;
+    const id = parseInt(document.getElementById('editId').value);
+    const title = document.getElementById('editTitle').value;
+    const excerpt = document.getElementById('editExcerpt').value;
+    const content = document.getElementById('editContent').value;
 
-                <div class="article-footer">
-                    <div>📊 سطح مقاله: تخصصی</div>
-                    <div>⏱️ زمان مطالعه: ۸ دقیقه</div>
-                </div>
-            `,
-            excerpt: "تحلیل عمیق تحولات استراتژیک در جنگ‌های زمینی معاصر و بررسی راهکارهای نوین"
-        },
-        {
-            id: 2,
-            title: "مقاله 2: تجهیزات مدرن پیاده‌نظام",
-            content: `
-                <div class="article-header-full">
-                    <h1>مقاله 2: تجهیزات مدرن پیاده‌نظام</h1>
-                    <div class="article-meta-full">
-                        <span>✍️ نویسنده: سرگرد مهندس علی احمدی</span>
-                        <span>📅 تاریخ: ۱۴۰۳/۱۱/۲۰</span>
-                        <span>👁️ بازدید: ۲۸۷</span>
-                        <span class="article-category-badge">نیروی زمینی</span>
-                    </div>
-                </div>
-
-                <div class="article-content">
-                    <h2>تحول تجهیزات</h2>
-                    <p>در دو دهه اخیر، تجهیزات پیاده‌نظام تحول چشمگیری داشته است. از سلاح‌های شخصی گرفته تا سیستم‌های ارتباطی، همه دستخوش تغییرات اساسی شده‌اند.</p>
-
-                    <h2>سلاح‌های پیشرفته</h2>
-                    <p>تفنگ‌های نسل جدید، مسلسل‌های دستی سبک‌تر و نارنجک‌اندازهای دقیق از مهم‌ترین تحولات هستند.</p>
-
-                    <h2>آینده تجهیزات</h2>
-                    <p>هوش مصنوعی و ربات‌های همراه نقش مهمی در آینده جنگ زمینی خواهند داشت.</p>
-                </div>
-
-                <div class="article-footer">
-                    <div>📊 سطح مقاله: متوسط</div>
-                    <div>⏱️ زمان مطالعه: ۶ دقیقه</div>
-                </div>
-            `,
-            excerpt: "بررسی جامع تجهیزات مدرن پیاده‌نظام و تأثیر آنها بر میدان نبرد"
-        },
-        {
-            id: 3,
-            title: "مقاله 3: تاکتیک‌های عملیات ویژه",
-            content: `
-                <div class="article-header-full">
-                    <h1>مقاله 3: تاکتیک‌های عملیات ویژه</h1>
-                    <div class="article-meta-full">
-                        <span>✍️ نویسنده: سروان محمدرضا کریمی</span>
-                        <span>📅 تاریخ: ۱۴۰۳/۱۱/۱۵</span>
-                        <span>👁️ بازدید: ۴۱۲</span>
-                        <span class="article-category-badge">نیروی زمینی</span>
-                    </div>
-                </div>
-
-                <div class="article-content">
-                    <h2>مقدمه</h2>
-                    <p>عملیات‌های ویژه نیازمند تاکتیک‌های خاص و نیروهای آموزش‌دیده است. این عملیات‌ها معمولاً در عمق خاک دشمن و با تعداد محدودی نیرو انجام می‌شود.</p>
-
-                    <h2>انواع عملیات ویژه</h2>
-                    <p>شامل عملیات‌های شناسایی ویژه، ضدتروریسم، نجات گروگان‌ها و تخریب اهداف حیاتی دشمن.</p>
-
-                    <h2>موفقیت در عملیات</h2>
-                    <p>عنصر غافلگیری، سرعت عمل و دقت در اجرا از عوامل کلیدی موفقیت هستند.</p>
-                </div>
-
-                <div class="article-footer">
-                    <div>📊 سطح مقاله: پیشرفته</div>
-                    <div>⏱️ زمان مطالعه: ۱۰ دقیقه</div>
-                </div>
-            `,
-            excerpt: "بررسی تاکتیک‌های عملیات ویژه و عوامل موفقیت در آنها"
-        },
-        {
-            id: 4,
-            title: "مقاله 4: جنگ شهری و چالش‌های آن",
-            content: `
-                <div class="article-header-full">
-                    <h1>مقاله 4: جنگ شهری و چالش‌های آن</h1>
-                    <div class="article-meta-full">
-                        <span>✍️ نویسنده: سرهنگ دوم حسینی</span>
-                        <span>📅 تاریخ: ۱۴۰۳/۱۱/۱۰</span>
-                        <span>👁️ بازدید: ۳۵۶</span>
-                        <span class="article-category-badge">نیروی زمینی</span>
-                    </div>
-                </div>
-
-                <div class="article-content">
-                    <h2>پیچیدگی‌های جنگ شهری</h2>
-                    <p>جنگ شهری به دلیل تراکم جمعیت غیرنظامی و ساختارهای پیچیده شهری، یکی از دشوارترین انواع نبرد است.</p>
-
-                    <h2>محدودیت‌ها</h2>
-                    <p>استفاده از تسلیحات سنگین محدودیت دارد و خطر تلفات غیرنظامی بالا است.</p>
-
-                    <h2>راهکارها</h2>
-                    <p>استفاده از واحدهای کوچک و متحرک، بهره‌گیری از اطلاعات دقیق و همکاری با نیروهای محلی.</p>
-                </div>
-
-                <div class="article-footer">
-                    <div>📊 سطح مقاله: تخصصی</div>
-                    <div>⏱️ زمان مطالعه: ۹ دقیقه</div>
-                </div>
-            `,
-            excerpt: "تحلیل پیچیدگی‌های جنگ شهری و ارائه راهکارهای عملیاتی"
-        },
-        {
-            id: 5,
-            title: "مقاله 5: نقش مهندسی رزمی در عملیات‌ها",
-            content: `
-                <div class="article-header-full">
-                    <h1>مقاله 5: نقش مهندسی رزمی در عملیات‌ها</h1>
-                    <div class="article-meta-full">
-                        <span>✍️ نویسنده: مهندس سعید رضایی</span>
-                        <span>📅 تاریخ: ۱۴۰۳/۱۱/۰۵</span>
-                        <span>👁️ بازدید: ۲۸۹</span>
-                        <span class="article-category-badge">نیروی زمینی</span>
-                    </div>
-                </div>
-
-                <div class="article-content">
-                    <h2>اهمیت مهندسی رزمی</h2>
-                    <p>مهندسی رزمی نقش حیاتی در موفقیت عملیات‌های زمینی دارد. از ایجاد موانع تا احداث پل‌های موقت.</p>
-
-                    <h2>ماموریت‌ها</h2>
-                    <p>خنثی‌سازی مین، احداث استحکامات، تعمیر و نگهداری راه‌ها و پل‌ها.</p>
-
-                    <h2>تجهیزات مدرن</h2>
-                    <p>بولدوزرهای زرهی، ماشین‌آلات ویژه تخریب و تجهیزات پیشرفته خنثی‌سازی مین.</p>
-                </div>
-
-                <div class="article-footer">
-                    <div>📊 سطح مقاله: متوسط</div>
-                    <div>⏱️ زمان مطالعه: ۷ دقیقه</div>
-                </div>
-            `,
-            excerpt: "بررسی نقش و مأموریت‌های مهندسی رزمی در عملیات‌های زمینی"
+    if(!title){alert('عنوان ضروری است'); return;}
+    if(id){ // ویرایش
+        const idx = articlesData[cat].findIndex(a=>a.id===id);
+        if(idx!==-1){
+            articlesData[cat][idx]={id,title,excerpt,content};
+        }else{
+            alert('مقاله پیدا نشد برای ویرایش');
+            return;
         }
-    ],
-
-    "airforce": [
-        { id: 1, title: "مقاله 1: نیروی هوایی ارتش جمهوری اسلامی ایران", excerpt: "تحلیل جامع توانمندی‌ها و استراتژی نیروی هوایی ایران" },
-        { id: 2, title: "مقاله 2: هواپیماهای رزمی پیشرفته ایرانی", excerpt: "معرفی و تحلیل جنگنده‌های بومی ایران شامل صاعقه، قاهر ۳۱۳ و کوثر" },
-        { id: 3, title: "مقاله 3: سیستم‌های دفاع هوایی مدرن", excerpt: "بررسی سامانه‌های دفاع هوایی ایرانی و مقایسه با نمونه‌های خارجی" },
-        { id: 4, title: "مقاله 4: آموزش خلبانان جنگنده", excerpt: "مراحل آموزش خلبانان جنگنده و چالش‌ها" },
-        { id: 5, title: "مقاله 5: آینده جنگ هوایی", excerpt: "تحولات آینده در جنگ هوایی و نقش فناوری‌های نوین" }
-    ],
-
-    "navy": [
-        { id: 1, title: "مقاله 1: نیروی دریایی و نقش آن در امنیت منطقه", excerpt: "تحلیل نقش نیروی دریایی در امنیت خلیج فارس و خطوط کشتیرانی" },
-        { id: 2, title: "مقاله 2: زیردریایی‌ها و جنگ زیرسطح", excerpt: "مبانی راهبردی زیردریایی‌ها و تاکتیک‌های مقابله" },
-        { id: 3, title: "مقاله 3: ناوشکن‌ها و سامانه‌های پدافندی دریایی", excerpt: "نگاهی به دفاع هوایی/موشکی شناورها" },
-        { id: 4, title: "مقاله 4: عملیات آبی-خاکی", excerpt: "اصول برنامه‌ریزی و اجرای عملیات‌های آبی-خاکی" },
-        { id: 5, title: "مقاله 5: جنگ الکترونیک در دریا", excerpt: "نقش EW در نبرد دریایی مدرن" }
-    ],
-
-    "ukraine": [
-        { id: 1, title: "مقاله 1: درس‌های پهپادی جنگ روسیه و اوکراین", excerpt: "چگونه پهپادها معادله میدان را عوض کردند" },
-        { id: 2, title: "مقاله 2: توپخانه و جنگ فرسایشی", excerpt: "نقش آتش پشتیبانی و زنجیره لجستیک" },
-        { id: 3, title: "مقاله 3: پدافند هوایی و موشک‌های کروز", excerpt: "چالش رهگیری و شبکه‌سازی دفاع" },
-        { id: 4, title: "مقاله 4: جنگ شهری و خطوط دفاعی", excerpt: "الگوهای پیشروی و دفاع در مناطق شهری" },
-        { id: 5, title: "مقاله 5: جنگ اطلاعاتی و سایبری", excerpt: "تأثیر اطلاعات، روایت و عملیات سایبری" }
-    ],
-
-    "resistance": [
-        { id: 1, title: "مقاله 1: بازدارندگی نامتقارن", excerpt: "چارچوب‌های بازدارندگی در محیط‌های نامتقارن" },
-        { id: 2, title: "مقاله 2: عملیات ترکیبی و شبکه‌ای", excerpt: "هماهنگی چند-جبهه‌ای و اثرات راهبردی" },
-        { id: 3, title: "مقاله 3: لجستیک و پایداری رزمی", excerpt: "چرا پشتیبانی، قلب هر نبرد طولانی است" },
-        { id: 4, title: "مقاله 4: فناوری‌های کم‌هزینه، اثرگذاری بالا", excerpt: "از پهپاد تا سامانه‌های ساده اما مؤثر" },
-        { id: 5, title: "مقاله 5: سناریوهای آینده منطقه", excerpt: "چشم‌انداز تحولات و نقاط اصطکاک" }
-    ],
-
-    "free": [
-        { id: 1, title: "مقاله 1: تاریخچه تحول جنگ‌های مدرن", excerpt: "از جنگ صنعتی تا جنگ شبکه‌محور" },
-        { id: 2, title: "مقاله 2: هوش مصنوعی در نبرد", excerpt: "کاربردها، محدودیت‌ها و روندهای آینده" },
-        { id: 3, title: "مقاله 3: فرماندهی و کنترل (C2)", excerpt: "چطور تصمیم‌گیری سریع‌تر می‌شود" },
-        { id: 4, title: "مقاله 4: تحلیل ریسک و امنیت ملی", excerpt: "مدل‌های ساده برای تحلیل راهبردی" },
-        { id: 5, title: "مقاله 5: جنگ روانی و رسانه", excerpt: "اثر روایت و عملیات رسانه‌ای بر میدان" }
-    ]
-};
-
-// ==================== توابع نمایشی (مشکل اصلی تو همین‌ها بود) ====================
-
-function getCategoryTitle(key) {
-    const titles = {
-        groundforce: "نیروی زمینی",
-        airforce: "نیروی هوایی",
-        navy: "نیروی دریایی",
-        ukraine: "جنگ روسیه و اوکراین",
-        resistance: "جبهه مقاومت",
-        free: "مقالات آزاد نظامی"
-    };
-    return titles[key] || "مقالات";
-}
-
-function escapeHtml(str) {
-    if (typeof str !== "string") return "";
-    return str
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
-
-function buildFallbackArticleHTML(categoryKey, article) {
-    const catTitle = getCategoryTitle(categoryKey);
-    const safeTitle = escapeHtml(article?.title || "مقاله");
-    const safeExcerpt = escapeHtml(article?.excerpt || "متن کامل این مقاله هنوز اضافه نشده است.");
-
-    return `
-        <div class="article-header-full">
-            <h1>${safeTitle}</h1>
-            <div class="article-meta-full">
-                <span>📌 دسته‌بندی: <span class="article-category-badge">${catTitle}</span></span>
-                <span>ℹ️ وضعیت: پیش‌نویس</span>
-            </div>
-        </div>
-
-        <div class="article-content">
-            <h2>خلاصه</h2>
-            <p>${safeExcerpt}</p>
-
-            <h2>یادداشت</h2>
-            <p>برای این مقاله هنوز فیلد <b>content</b> تنظیم نشده. وقتی متن کامل را اضافه کنی، همین صفحه به صورت خودکار متن کامل را نمایش می‌دهد.</p>
-        </div>
-
-        <div class="article-footer">
-            <div>📊 سطح مقاله: -</div>
-            <div>⏱️ زمان مطالعه: -</div>
-        </div>
-    `;
-}
-
-function showArticles(categoryKey) {
-    const categoriesSection = document.getElementById("categoriesSection");
-    const articlesSection = document.getElementById("articlesSection");
-    const articleFull = document.getElementById("articleFull");
-
-    const articlesTitle = document.getElementById("articlesTitle");
-    const articlesList = document.getElementById("articlesList");
-
-    // امنیت: اگر دسته وجود نداشت
-    const items = articlesData[categoryKey];
-    if (!items || !Array.isArray(items)) {
-        console.warn("Category not found:", categoryKey);
-        return;
+    }else{ // اضافه
+        const newId = articlesData[cat].length+1;
+        articlesData[cat].push({id:newId,title,excerpt,content});
     }
+    alert('مقاله ذخیره شد!');
+    buildCategories();
+}
 
-    // نمایش/پنهان‌سازی
-    categoriesSection.style.display = "none";
-    articleFull.style.display = "none";
-    articlesSection.style.display = "block";
+// تابع escapeHtml
+function escapeHtml(str){return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;");}
 
-    // عنوان
-    articlesTitle.textContent = "مقالات " + getCategoryTitle(categoryKey);
-
-    // پاکسازی لیست
-    articlesList.innerHTML = "";
-
-    // ساخت کارت‌ها
-    items.forEach((article) => {
-        const card = document.createElement("div");
-        card.className = "article-card";
-
-        const excerpt = article.excerpt ? escapeHtml(article.excerpt) : "خلاصه این مقاله هنوز نوشته نشده است.";
-
-        card.innerHTML = `
-            <div class="article-number">📄 ${article.id}</div>
-            <h3>${escapeHtml(article.title || "بدون عنوان")}</h3>
-            <div class="article-excerpt">${excerpt}</div>
-            <button class="read-more" type="button">مشاهده مقاله</button>
-        `;
-
-        card.addEventListener("click", () => showFullArticle(categoryKey, article.id));
-        articlesList.appendChild(card);
+// ==== دسته‌ها ====
+function buildCategories(){
+    const categoriesSection = document.getElementById('categoriesSection');
+    categoriesSection.innerHTML='';
+    const keys=['groundforce','airforce','navy','ukraine','resistance','free'];
+    keys.forEach(k=>{
+        const div = document.createElement('div');
+        div.className='category-card';
+        div.onclick=()=>showArticles(k);
+        const count = articlesData[k].length;
+        div.innerHTML=`<div class="article-count">${count}</div>
+        <div style="font-size:50px;margin-bottom:15px;color:#ffd700;">✏️</div>
+        <div class="category-title">${getCategoryTitle(k)}</div>
+        <div class="category-desc">تعداد مقاله: ${count}</div>
+        <button class="category-btn">مشاهده ${count} مقاله →</button>`;
+        categoriesSection.appendChild(div);
     });
-
-    // اسکرول نرم به بالا
-    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function showFullArticle(categoryKey, articleId) {
-    const articlesSection = document.getElementById("articlesSection");
-    const articleFull = document.getElementById("articleFull");
-    const articleContent = document.getElementById("articleContent");
-
-    const items = articlesData[categoryKey] || [];
-    const article = items.find(a => a.id === articleId);
-
-    if (!article) {
-        console.warn("Article not found:", categoryKey, articleId);
-        return;
-    }
-
-    // نمایش مقاله کامل
-    articlesSection.style.display = "none";
-    articleFull.style.display = "block";
-
-    // اگر content داشت، همونو نمایش بده؛ اگر نداشت، نسخه پیش‌فرض
-    articleContent.innerHTML = article.content ? article.content : buildFallbackArticleHTML(categoryKey, article);
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
+// ==== نام دسته ====
+function getCategoryTitle(key){
+    const titles={groundforce:'نیروی زمینی',airforce:'نیروی هوایی',navy:'نیروی دریایی',ukraine:'جنگ روسیه و اوکراین',resistance:'جبهه مقاومت',free:'مقالات آزاد نظامی'};
+    return titles[key]||'مقالات';
 }
 
-function backToCategories() {
-    document.getElementById("categoriesSection").style.display = "grid";
-    document.getElementById("articlesSection").style.display = "none";
-    document.getElementById("articleFull").style.display = "none";
-    window.scrollTo({ top: 0, behavior: "smooth" });
+// ==== نمایش مقالات دسته ====
+function showArticles(cat){
+    document.getElementById('categoriesSection').style.display='none';
+    document.getElementById('articlesSection').style.display='block';
+    const list = document.getElementById('articlesList');
+    list.innerHTML='';
+    articlesData[cat].forEach(a=>{
+        const card = document.createElement('div');
+        card.className='article-card';
+        card.innerHTML=`<h3>${escapeHtml(a.title)}</h3><p class="article-excerpt">${escapeHtml(a.excerpt||'بدون خلاصه')}</p>
+        <button class="read-more" onclick="showArticleFull('${cat}',${a.id})">مشاهده کامل →</button>`;
+        list.appendChild(card);
+    });
 }
 
-function backToArticles() {
-    document.getElementById("articleFull").style.display = "none";
-    document.getElementById("articlesSection").style.display = "block";
-    window.scrollTo({ top: 0, behavior: "smooth" });
+// ==== مقاله کامل ====
+function showArticleFull(cat,id){
+    document.getElementById('articlesSection').style.display='none';
+    document.getElementById('articleFull').style.display='block';
+    const article = articlesData[cat].find(a=>a.id===id);
+    document.getElementById('articleContent').innerHTML=article?.content||`<p>${escapeHtml(article?.excerpt||'مقاله‌ای موجود نیست')}</p>`;
 }
+
+// ==== بازگشت ====
+function backToCategories(){document.getElementById('articlesSection').style.display='none';document.getElementById('categoriesSection').style.display='grid';}
+function backToArticles(){document.getElementById('articleFull').style.display='none';document.getElementById('articlesSection').style.display='block';}
+
+// ==== اجرای اولیه ====
+buildCategories();
 </script>
 </body>
 </html>
