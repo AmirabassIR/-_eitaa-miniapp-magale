@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مقالات نظامی | Military Articles</title>
+<style>
+    @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Vazir', sans-serif;
+        direction: rtl;
+        background: linear-gradient(135deg, #0c2461 0%, #1e3799 100%);
+        color: #fff;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* هدر */
+    .header {
+        text-align: center;
+        padding: 30px 20px;
+        margin-bottom: 40px;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 20px;
+        border: 3px solid #ffd700;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #ffd700, #ff6b6b, #4ecdc4);
+    }
+
+    .header h1 {
+        font-size: 36px;
+        color: #ffd700;
+        margin-bottom: 15px;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    }
+
+    .header p {
+        font-size: 18px;
+        color: #aaa;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    /* دسته‌بندی‌ها */
+    .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+
+    .category-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 25px;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .category-card:hover {
+        transform: translateY(-10px) scale(1.03);
+        border-color: #ffd700;
+        box-shadow: 0 15px 35px rgba(255, 215, 0, 0.3);
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .category-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #ff6b6b, #ffd700, #4ecdc4);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .category-card:hover::before {
+        opacity: 1;
+    }
+
+    .category-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #ffd700;
+        margin-bottom: 20px;
+        transition: all 0.3s;
+        background: white;
+        padding: 5px;
+    }
+
+    .category-card:hover .category-image {
+        transform: rotate(5deg) scale(1.1);
+        border-color: #ff6b6b;
+    }
+
+    .category-title {
+        font-size: 22px;
+        color: #ffd700;
+        margin-bottom: 15px;
+        font-weight: bold;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .category-desc {
+        color: #ccc;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .category-btn {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .category-btn:hover {
+        background: linear-gradient(135deg, #ff8e53 0%, #ff6b6b 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+    }
+
+    .article-count {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: #ff6b6b;
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 14px;
+        border: 2px solid white;
+    }
+
+    /* لیست مقالات */
+    .articles-section {
+        display: none;
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #ffd700;
+    }
+
+    .section-header h2 {
+        font-size: 28px;
+        color: #ffd700;
+    }
+
+    .back-btn {
+        background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .back-btn:hover {
+        transform: translateX(-5px);
+        box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+    }
+
+    .articles-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+    }
+
+    .article-card {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 15px;
+        padding: 25px;
+        transition: all 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .article-card:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-5px);
+        border-color: #ffd700;
+        box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+    }
+
+    .article-card h3 {
+        color: #4ecdc4;
+        font-size: 20px;
+        margin-bottom: 15px;
+        line-height: 1.4;
+        flex-grow: 1;
+    }
+
+    .article-meta {
+        display: flex;
+        justify-content: space-between;
+        color: #aaa;
+        font-size: 14px;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .article-excerpt {
+        color: #ccc;
+        line-height: 1.8;
+        font-size: 15px;
+        margin-bottom: 20px;
+        flex-grow: 2;
+    }
+
+    .read-more {
+        background: transparent;
+        color: #ffd700;
+        border: 2px solid #ffd700;
+        padding: 8px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: center;
+        margin-top: auto;
+    }
+
+    .read-more:hover {
+        background: #ffd700;
+        color: #0c2461;
+        transform: scale(1.05);
+    }
+
+    /* صفحه مقاله کامل */
+    .article-full {
+        display: none;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .article-header-full {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 40px;
+        border-radius: 20px;
+        margin-bottom: 40px;
+        border: 2px solid #ffd700;
+        position: relative;
+    }
+
+    .article-header-full h1 {
+        font-size: 32px;
+        color: #ffd700;
+        margin-bottom: 20px;
+        line-height: 1.4;
+    }
+
+    .article-meta-full {
+        display: flex;
+        gap: 30px;
+        color: #aaa;
+        font-size: 16px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .article-category-badge {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        display: inline-block;
+    }
+
+    .article-content {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 40px;
+        border-radius: 20px;
+        line-height: 2;
+        font-size: 18px;
+        margin-bottom: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .article-content h2 {
+        color: #4ecdc4;
+        margin: 30px 0 15px;
+        border-right: 4px solid #ffd700;
+        padding-right: 15px;
+    }
+
+    .article-content h3 {
+        color: #ffd700;
+        margin: 25px 0 10px;
+        font-size: 20px;
+    }
+
+    .article-content p {
+        margin-bottom: 20px;
+        text-align: justify;
+    }
+
+    .article-content ul {
+        margin: 20px 0;
+        padding-right: 30px;
+    }
+
+    .article-content li {
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .article-content li::before {
+        content: '•';
+        color: #ffd700;
+        font-size: 20px;
+        position: absolute;
+        right: -20px;
+    }
+
+    .article-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 20px;
+        border-top: 2px solid rgba(255, 255, 255, 0.1);
+        color: #aaa;
+        font-size: 14px;
+    }
+
+    /* فوتر */
+    .footer {
+        text-align: center;
+        padding: 30px 20px;
+        margin-top: 50px;
+        color: #aaa;
+        font-size: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* ریسپانسیو */
+    @media (max-width: 768px) {
+        .categories-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .articles-list {
+            grid-template-columns: 1fr;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+        }
+        
+        .category-title {
+            font-size: 20px;
+        }
+        
+        .article-header-full h1 {
+            font-size: 26px;
+        }
+        
+        .article-content {
+            padding: 25px;
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 10px;
+        }
+        
+        .header {
+            padding: 20px 15px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+        }
+        
+        .category-card {
+            padding: 20px;
+        }
+        
+        .category-image {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .section-header {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+        }
+        
+        .article-meta-full {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
+    /* انیمیشن‌ها */
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .slide-in {
+        animation: slideIn 0.6s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .delay-3 { animation-delay: 0.3s; opacity: 0; }
+    .delay-4 { animation-delay: 0.4s; opacity: 0; }
+    .delay-5 { animation-delay: 0.5s; opacity: 0; }
+    .delay-6 { animation-delay: 0.6s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <!-- هدر -->
+    <header class="header">
+        <h1>📚 مقالات نظامی تخصصی</h1>
+        <p>مرجع تخصصی مقالات نظامی، تحلیل‌های راهبردی و اطلاعات نظامی روز جهان</p>
+    </header>
+
+    <!-- بخش دسته‌بندی‌ها -->
+    <div id="categoriesSection" class="categories-grid">
+        <!-- نیروی زمینی -->
+        <div class="category-card slide-in delay-1" onclick="showArticles('groundforce')">
+            <div class="article-count">۸</div>
+            <img src="https://www.jowhareh.com/images/Jowhareh/galleries_5/medium_d44e68c0-2cf2-4172-89b2-ddbc49789dbe.webp" 
+                 alt="نیروی زمینی" class="category-image">
+            <div class="category-title">نیروی زمینی</div>
+            <div class="category-desc">
+                تحلیل استراتژی‌های زمینی، تجهیزات پیاده‌نظام، تاکتیک‌های رزمی و عملیات‌های ویژه
+            </div>
+            <button class="category-btn">مشاهده مقالات →</button>
+        </div>
+
+        <!-- نیروی هوایی -->
+        <div class="category-card slide-in delay-2" onclick="showArticles('airforce')">
+            <div class="article-count">۷</div>
+            <img src="https://www.jowhareh.com/images/Jowhareh/galleries_9/large_c180e836-f806-4f56-88f0-8aa6a6c3a068.webp" 
+                 alt="نیروی هوایی" class="category-image">
+            <div class="category-title">نیروی هوایی</div>
+            <div class="category-desc">
+                هواپیماهای رزمی، سیستم‌های دفاع هوایی، استراتژی‌های هوایی و فناوری‌های مدرن
+            </div>
+            <button class="category-btn">مشاهده مقالات →</button>
+        </div>
+
+        <!-- نیروی دریایی -->
+        <div class="category-card slide-in delay-3" onclick="showArticles('navy')">
+            <div class="article-count">۶</div>
+            <img src="https://cdn.tabnak.ir/files/fa/news/1403/9/10/1919811_323.jpg" 
+                 alt="نیروی دریایی" class="category-image">
+            <div class="category-title">نیروی دریایی</div>
+            <div class="category-desc">
+                ناوگان‌های دریایی، زیردریایی‌ها، عملیات‌های آبی-خاکی و استراتژی‌های دریایی
+            </div>
+            <button class="category-btn">مشاهده مقالات →</button>
+        </div>
+
+        <!-- جنگ روسیه و اوکراین -->
+        <div class="category-card slide-in delay-4" onclick="showArticles('ukraine')">
+            <div class="article-count">۹</div>
+            <img src="https://cdn.donya-e-eqtesad.com/thumbnail/YNQnHPkr4bJf/QHn8O9nsSzT8qCU7RegsN6Pbb5v74eEtbKeSOh05Rab2U55spcPmLUt7TZyzEhnm/%D8%AC%D9%86%DA%AF+%D8%B1%D9%88%D8%B3%DB%8C%D9%87+%D9%88+%D8%A7%D9%88%DA%A9%D8%B1%D8%A7%DB%8C%D9%86+.jpg" 
+                 alt="جنگ روسیه و اوکراین" class="category-image">
+            <div class="category-title">جنگ روسیه و اوکراین</div>
+            <div class="category-desc">
+                تحلیل روزانه نبردها، استراتژی‌های نظامی، تأثیرات منطقه‌ای و درس‌های نظامی
+            </div>
+            <button class="category-btn">مشاهده مقالات →</button>
+        </div>
+
+        <!-- جبهه مقاومت -->
+        <div class="category-card slide-in delay-5" onclick="showArticles('resistance')">
+            <div class="article-count">۵</div>
+            <img src="https://idc0-cdn0.khamenei.ir/ndata/news/47814/C/14000217_0147814.jpg?r=0.04465376324634085" 
+                 alt="جبهه مقاومت" class="category-image">
+            <div class="category-title">جبهه مقاومت</div>
+            <div class="category-desc">
+                استراتژی‌های مقاومت، عملیات‌های مشترک، تحلیل توانمندی‌ها و چشم‌انداز آینده
+            </div>
+            <button class="category-btn">مشاهده مقالات →</button>
+        </div>
+
+        <!-- مقالات آزاد -->
+        <div class="category-card slide-in delay-6" onclick="showArticles('free')">
+            <div class="article-count">۱۰</div>
+            <img src="https://tiktarh.com/storage/old/2024/11/Shmltry1002363www.tiktarh.com_.jpg" 
+                 alt="مقالات آزاد" class="category-image">
+            <div class="category-title">مقالات آزاد نظامی</div>
+            <div class="category-desc">
+                موضوعات متنوع نظامی، تاریخ نظامی، فناوری‌های نوین و تحلیل‌های تخصصی
+            </div>
+            <button class="category-btn">مشاهده مقالات →</button>
+        </div>
+    </div>
+
+    <!-- بخش مقالات هر دسته -->
+    <div id="articlesSection" class="articles-section">
+        <div class="section-header">
+            <h2 id="articlesTitle">مقالات</h2>
+            <button class="back-btn" onclick="backToCategories()">
+                ← بازگشت به دسته‌بندی‌ها
+            </button>
+        </div>
+        <div class="articles-list" id="articlesList"></div>
+    </div>
+
+    <!-- صفحه مقاله کامل -->
+    <div id="articleFull" class="article-full">
+        <button class="back-btn" onclick="backToArticles()" style="margin-bottom: 20px;">
+            ← بازگشت به مقالات
+        </button>
+        <div id="articleContent"></div>
+    </div>
+</div>
+
+<!-- فوتر -->
+<footer class="footer">
+    <p>© ۱۴۰۳ - سیستم مقالات نظامی | تمامی حقوق محفوظ است</p>
+    <p>این سایت صرفاً برای اهداف آموزشی و اطلاع‌رسانی طراحی شده است</p>
+</footer>
+
+<script>
+// ==================== داده‌های مقالات ====================
+const articlesData = {
+    "groundforce": [
+        {
+            id: 1,
+            title: "استراتژی‌های نوین جنگ زمینی در قرن ۲۱",
+            content: `
+                <div class="article-header-full">
+                    <h1>استراتژی‌های نوین جنگ زمینی در قرن ۲۱</h1>
+                    <div class="article-meta-full">
+                        <span>✍️ نویسنده: سرهنگ دکتر رضا محمدی</span>
+                        <span>📅 تاریخ: ۱۴۰۳/۱۱/۲۵</span>
+                        <span>👁️ بازدید: ۳۲۴</span>
+                        <span class="article-category-badge">نیروی زمینی</span>
+                    </div>
+                    <p style="color: #ccc; line-height: 1.8;">تحلیل عمیق تحولات استراتژیک در جنگ‌های زمینی معاصر</p>
+                </div>
+                
+                <div class="article-content">
+                    <h2>مقدمه</h2>
+                    <p>جنگ زمینی در قرن ۲۱ دستخوش تحولات بنیادینی شده است. پیشرفت فناوری، تغییر در ماهیت تهدیدات و تحول در ساختار نیروها، همه و همه بر استراتژی‌های جنگی تأثیر گذاشته‌اند.</p>
+                    
+                    <h2>تحولات کلیدی در جنگ زمینی</h2>
+                    
+                    <h3>۱. جنگ شهری و پیچیدگی‌های آن</h3>
+                    <p>جنگ شهری به یکی از پیچیده‌ترین اشکال نبرد تبدیل شده است. ویژگی‌های اصلی:</p>
+                    <ul>
+                        <li>تراکم جمعیت غیرنظامی</li>
+                        <li>ساختارهای شهری پیچیده</li>
+                        <li>محدودیت در استفاده از تسلیحات سنگین</li>
+                        <li>اهمیت جنگ اطلاعاتی و روانی</li>
+                    </ul>
+                    
+                    <h3>۲. ادغام نیروهای متعارف و نامتعارف</h3>
+                    <p>مرز بین نیروهای متعارف و نامتعارف در حال محو شدن است. امروزه شاهد ترکیب تاکتیک‌های کلاسیک با روش‌های نامتقارن هستیم.</p>
+                    
+                    <h3>۳. نقش فناوری‌های نوین</h3>
+                    <p>فناوری‌های زیر نقش تعیین‌کننده‌ای دارند:</p>
+                    <ul>
+                        <li>پهپادهای رزمی و شناسایی</li>
+                        <li>سیستم‌های فرماندهی و کنترل پیشرفته</li>
+                        <li>تجهیزات شب‌نما و حرارتی</li>
+                        <li>سلاح‌های هدایت شونده دقیق</li>
+                    </ul>
+                    
+                    <h2>چالش‌های پیش‌رو</h2>
+                    <p>نیروهای زمینی امروز با چالش‌های متعددی روبرو هستند که مهم‌ترین آنها عبارتند از:</p>
+                    <ul>
+                        <li>تهدیدات نامتقارن و غیرمتعارف</li>
+                        <li>نیاز به انعطاف‌پذیری سازمانی</li>
+                        <li>اهمیت جنگ الکترونیک</li>
+                        <li>حفاظت از نیروها در محیط‌های پیچیده</li>
+                    </ul>
+                    
+                    <h2>راهکارهای استراتژیک</h2>
+                    <p>برای مقابله با این چالش‌ها، راهکارهای زیر پیشنهاد می‌شود:</p>
+                    <ol>
+                        <li>تمرکز بر آموزش تخصصی نیروها</li>
+                        <li>سرمایه‌گذاری در فناوری‌های نوین</li>
+                        <li>توسعه واحدهای کوچک و مستقل</li>
+                        <li>تقویت همکاری بین‌نیرویی</li>
+                    </ol>
+                    
+                    <h2>نتیجه‌گیری</h2>
+                    <p>نیروی زمینی موفق در قرن ۲۱ نیرویی است که بتواند به سرعت خود را با شرایط متغیر تطبیق دهد، از فناوری‌های نوین بهره ببرد و در عین حفظ قابلیت‌های کلاسیک، توانایی مقابله با تهدیدات نامتقارن را داشته باشد.</p>
+                </div>
+                
+                <div class="article-footer">
+                    <div>📊 سطح مقاله: تخصصی</div>
+                    <div>⏱️ زمان مطالعه: ۱۲ دقیقه</div>
+                    <div>🏷️ کلیدواژه‌ها: استراتژی نظامی، جنگ زمینی، تاکتیک‌های نوین</div>
+                </div>
+            `,
+            author: "سرهنگ دکتر رضا محمدی",
+            date: "۱۴۰۳/۱۱/۲۵",
+            views: 324,
+            readTime: "۱۲ دقیقه",
+            tags: ["استراتژی نظامی", "جنگ زمینی", "تاکتیک‌های نوین"],
+            excerpt: "تحلیل عمیق تحولات استراتژیک در جنگ‌های زمینی معاصر و بررسی راهکارهای نوین برای نیروهای زمینی"
+        },
+        {
+            id: 2,
+            title: "تجهیزات مدرن پیاده‌نظام: از تفنگ تا پهپاد",
+            content: `
+                <div class="article-header-full">
+                    <h1>تجهیزات مدرن پیاده‌نظام: از تفنگ تا پهپاد</h1>
+                    <div class="article-meta-full">
+                        <span>✍️ نویسنده: سرگرد مهندس علی احمدی</span>
+                        <span>📅 تاریخ: ۱۴۰۳/۱۱/۲۰</span>
+                        <span>👁️ بازدید: ۲۸۷</span>
+                        <span class="article-category-badge">نیروی زمینی</span>
+                    </div>
+                    <p style="color: #ccc; line-height: 1.8;">بررسی جامع تجهیزات مدرن پیاده‌نظام و تأثیر آنها بر میدان نبرد</p>
+                </div>
+                
+                <div class="article-content">
+                    <h2>تحول تجهیزات پیاده‌نظام</h2>
+                    <p>در دو دهه اخیر، تجهیزات پیاده‌نظام تحول چشمگیری داشته است. از سلاح‌های شخصی گرفته تا سیستم‌های ارتباطی، همه دستخوش تغییرات اساسی شده‌اند.</p>
+                    
+                    <h2>سلاح‌های شخصی پیشرفته</h2>
+                    
+                    <h3>۱. تفنگ‌های تهاجمی نسل جدید</h3>
+                    <p>تفنگ‌های مانند HK416، SCAR و نمونه‌های بومی ایرانی ویژگی‌های زیر را دارند:</p>
+                    <ul>
+                        <li>قابلیت نصب انواع دوربین و نشانگر لیزری</li>
+                        <li>طراحی ارگونومیک برای کاهش خستگی</li>
+                        <li>قابلیت شلیک نیمه و تمام خودکار</li>
+                        <li>دقت بالا در بردهای مختلف</li>
+                    </ul>
+                    
+                    <h3>۲. سلاح‌های تکمیلی</h3>
+                    <p>شامل مسلسل‌های دستی، نارنجک‌اندازها و تفنگ‌های ساچمه‌ای که نقش پشتیبانی دارند.</p>
+                    
+                    <h2>تجهیزات حفاظتی</h2>
+                    
+                    <h3>۱. جلیقه‌های ضدگلوله نسل جدید</h3>
+                    <p>سبک‌تر، مقاوم‌تر و با قابلیت‌های بیشتر مانند:</p>
+                    <ul>
+                        <li>محافظت در برابر انواع گلوله</li>
+                        <li>قابلیت نصب تجهیزات اضافی</li>
+                        <li>تنفس‌پذیری بهتر</li>
+                        <li>سازه‌های ماژولار</li>
+                    </ul>
+                    
+                    <h3>۲. کلاه‌های ایمنی پیشرفته</h3>
+                    <p>با قابلیت‌هایی مانند نصب دوربین شب‌نما، سیستم ارتباطی و محافظ گوش.</p>
+                    
+                    <h2>سیستم‌های ارتباطی و شناسایی</h2>
+                    <p>این سیستم‌ها نیروها را به شبکه اطلاعاتی متصل می‌کنند:</p>
+                    <ul>
+                        <li>رادیوهای رمزنگاری شده</li>
+                        <li>دستگاه‌های موقعیت‌یاب GPS</li>
+                        <li>دوربین‌های حرارتی دستی</li>
+                        <li>تجهیزات شناسایی دوست از دشمن</li>
+                    </ul>
+                    
+                    <h2>نقش پهپادها در پیاده‌نظام</h2>
+                    <p>پهپادهای کوچک انقلابی در عملیات‌های پیاده‌نظام ایجاد کرده‌اند:</p>
+                    <ol>
+                        <li>پهپادهای شناسایی برای کسب اطلاعات</li>
+                        <li>پهپادهای رزمی برای حمل مهمات</li>
+                        <li>پهپادهای لجستیکی برای ارسال آذوقه</li>
+                    </ol>
+                    
+                    <h2>آینده تجهیزات پیاده‌نظام</h2>
+                    <p>روندهای آینده نشان می‌دهد که:</p>
+                    <ul>
+                        <li>هوش مصنوعی نقش مهمی خواهد داشت</li>
+                        <li>ربات‌های همراه نیروها را پشتیبانی می‌کنند</li>
+                        <li>تجهیزات بیومتریک گسترش می‌یابند</li>
+                        <li>سلاح‌های انرژی هدایت‌شده ظهور خواهند کرد</li>
+                    </ul>
+                </div>
+                
+                <div class="article-footer">
+                    <div>📊 سطح مقاله: متوسط</div>
+                    <div>⏱️ زمان مطالعه: ۱۰ دقیقه</div>
+                    <div>🏷️ کلیدواژه‌ها: تجهیزات نظامی، پیاده‌نظام، فناوری‌های نوین</div>
+                </div>
+            `,
+            author: "سرگرد مهندس علی احمدی",
+            date: "۱۴۰۳/۱۱/۲۰",
+            views: 287,
+            readTime: "۱۰ دقیقه",
+            tags: ["تجهیزات نظامی", "پیاده‌نظام", "فناوری‌های نوین"],
+            excerpt: "بررسی جامع تجهیزات مدرن پیاده‌نظام و تأثیر آنها بر میدان نبرد"
+        }
+    ],
+    
+    "airforce": [
+        {
+            id: 1,
+            title: "نیروی هوایی ارتش جمهوری اسلامی ایران",
+            content: `
+                <div class="article-header-full">
+                    <h1>نیروی هوایی ارتش جمهوری اسلامی ایران</h1>
+                    <div class="article-meta-full">
+                        <span>✍️ نویسنده: سرهنگ خلبان محمود احمدی</span>
+                        <span>📅 تاریخ: ۱۴۰۳/۱۱/۲۰</span>
+                        <span>👁️ بازدید: ۴۲۱</span>
+                        <span class="article-category-badge">نیروی هوایی</span>
+                    </div>
+                    <p style="color: #ccc; line-height: 1.8;">تحلیل جامع توانمندی‌ها و استراتژی نیروی هوایی ایران</p>
+                </div>
+                
+                <div class="article-content">
+                    <h2>تاریخچه و توسعه</h2>
+                    <p>نیروی هوایی ارتش جمهوری اسلامی ایران در طول چهار دهه گذشته تحول چشمگیری داشته است. از یک نیروی وابسته به واردات به یک نیروی خودکفا با قابلیت‌های بومی تبدیل شده است.</p>
+                    
+                    <h2>ساختار سازمانی</h2>
+                    
+                    <h3>پایگاه‌های عملیاتی اصلی</h3>
+                    <p>ایران دارای چندین پایگاه شکاری اصلی است که هر کدام مأموریت‌های خاصی دارند:</p>
+                    <ul>
+                        <li><strong>پایگاه شکاری مهرآباد:</strong> مرکز فرماندهی و کنترل</li>
+                        <li><strong>پایگاه شکاری تبریز:</strong> دفاع از شمال غرب کشور</li>
+                        <li><strong>پایگاه شکاری اصفهان:</strong> آموزش خلبانان و عملیات ویژه</li>
+                        <li><strong>پایگاه شکاری بوشهر:</strong> پوشش جنوب و تنگه هرمز</li>
+                    </ul>
+                    
+                    <h2>ناوگان هوایی</h2>
+                    
+                    <h3>جنگنده‌های عملیاتی</h3>
+                    <p>نیروی هوایی ایران ترکیبی از جنگنده‌های روسی، آمریکایی و بومی را در اختیار دارد:</p>
+                    <ul>
+                        <li><strong>میگ-۲۹:</strong> جنگنده برتری هوایی</li>
+                        <li><strong>سوخو-۲۴:</strong> بمب‌افکن تهاجمی</li>
+                        <li><strong>اف-۱۴ تامکت:</strong> رهگیر دوربرد
